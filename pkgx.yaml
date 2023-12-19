@@ -1,0 +1,9 @@
+dependencies:
+  gnu.org/coreutils: '*'
+  uuidgen: '*'
+  taskfile.dev: '*'
+  packer.io: '*'
+  terraform.io: ^1.6
+  jetporch.com: '*'
+  openssh.com: '*'
+  pkgx: '1.0.0'

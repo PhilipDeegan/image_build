@@ -1,0 +1,37 @@
+version: '3'
+
+tasks:
+  default:
+    desc: list tasks
+    silent: true
+    cmds:
+    - task --list
+
+  build:
+    desc: build
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils env \
+           --split-string \
+           --ignore-environment \
+           USER="${USER}" \
+           HOME="${HOME}" \
+           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^5 bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+        eval "$(pkgx --shellcode)"
+        eval "$(ssh-agent -s)"
+        packer build constructor
+        ssh-agent -k
+      EOF
+
+  fetch:
+    desc: Locally fetch the VM artifact from the build cloud
+    cmds:
+    - bash "${PWD}/constructor/local/install/scripts/openstack_image_fetch.bash"
+ 
+  post-install:
+    desc: post-install
