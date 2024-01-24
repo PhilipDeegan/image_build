@@ -7,6 +7,28 @@ tasks:
     cmds:
     - task --list
 
+  init:
+    desc: init
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils env \
+           --split-string \
+           --ignore-environment \
+           USER="${USER}" \
+           HOME="${HOME}" \
+           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^5 bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+        eval "$(pkgx --shellcode)"
+        eval "$(ssh-agent -s)"
+        packer init .
+        ssh-agent -k
+      EOF
+
+
   build:
     desc: build
     cmds:
