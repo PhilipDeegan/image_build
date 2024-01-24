@@ -19,7 +19,7 @@ function main {
 
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL}" == "Xtrue" ]; then
         ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
-        task install
+        task provisioner:install
              
     else
         pp 'Set the environment variable PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL to true to execute the provisioner install task'
