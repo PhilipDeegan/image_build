@@ -9,7 +9,7 @@ build {
       "REMOTE_SSH_PRIVATE_KEY=${build.SSHPrivateKey}"
     ]
     inline = [
-      "bash constructor/local/install/scripts/ssh_add.bash"
+      "bash .constructor/local/install/scripts/ssh_add.bash"
     ]
   }
   #
@@ -21,7 +21,7 @@ build {
       "REMOTE_USER=${build.User}"
     ]
     inline = [
-      "bash constructor/local/install/scripts/exec_provisioner_task.bash"
+      "bash .constructor/local/install/scripts/exec_provisioner_task.bash"
     ]
   }
 
@@ -65,7 +65,7 @@ build {
     }
     post-processor "shell-local" {
         inline=[
-            "bash constructor/local/install/scripts/exec_post_processor_task.bash"
+            "bash .constructor/local/install/scripts/exec_post_processor_task.bash"
         ]
     }
 }

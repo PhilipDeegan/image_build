@@ -11,9 +11,9 @@ function pp {
 }
 
 function main {
-    local -r INVENTORY="${PWD}/provisioner/inventory.pkgx"
-    local -r PLAYBOOKS="${PWD}/provisioner/playbooks"
-    local -r ROLES="${PWD}/provisioner/roles"
+    local -r INVENTORY="${PWD}/.provisioner/inventory-ansible.pkgx"
+    local -r PLAYBOOKS="${PWD}/.provisioner/playbooks"
+    local -r ROLES="${PWD}/.provisioner/roles"
 
     #cd "${PROVISIONER_REPO_PATH}"
 

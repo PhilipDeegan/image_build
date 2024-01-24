@@ -24,14 +24,14 @@ tasks:
                 - <<'EOF'
         eval "$(pkgx --shellcode)"
         eval "$(ssh-agent -s)"
-        packer build constructor
+        packer build .constructor
         ssh-agent -k
       EOF
 
   fetch:
     desc: Locally fetch the VM artifact from the build cloud
     cmds:
-    - bash "${PWD}/constructor/local/install/scripts/openstack_image_fetch.bash"
+    - bash "${PWD}/.constructor/local/install/scripts/openstack_image_fetch.bash"
  
   post-install:
     desc: post-install
