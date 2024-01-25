@@ -50,6 +50,11 @@ tasks:
         ssh-agent -k
       EOF
 
+  get_ssh_key_path:
+    desc: return temporary ssh key path
+    cmds:
+    - echo "${PWD}/temp/packer_temporary_ssh_key"
+
   fetch:
     desc: Locally fetch the VM artifact from the build cloud
     cmds:
