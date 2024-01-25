@@ -19,7 +19,7 @@ function main {
 
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL}" == "Xtrue" ]; then
         ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
-        parent_dir = "$(dirname $PWD)"
+        local parent_dir="$(dirname $PWD)"
         task --taskfile "${parent_dir}/Taskfile.yml" provisioner:install
              
     else
@@ -29,7 +29,7 @@ function main {
     # cleanup cloud-init
     #
     #cd "${CONSTRUCTOR_REPO_PATH}"
-    parent_dir = "$(dirname $PWD)"
+    local parent_dir="$(dirname $PWD)"
     task --taskfile "${parent_dir}/Taskfile.yml" constructor:post-install
 }
 
