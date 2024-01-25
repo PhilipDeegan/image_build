@@ -54,6 +54,14 @@ tasks:
     desc: return temporary ssh key path
     cmds:
     - echo "${PWD}/temp/packer_temporary_ssh_key"
+  
+  get_remote_fqdn:
+    cmds:
+    - echo "packer.build.local"
+
+  get_remote_user:
+    cmds:
+    - echo "{{.PKR_VAR_TARGET_SSH_USERNAME}}"
 
   fetch:
     desc: Locally fetch the VM artifact from the build cloud
