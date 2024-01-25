@@ -11,6 +11,8 @@ function main {
     #
     echo "${REMOTE_SSH_PRIVATE_KEY}" > "${ssh_private_key_file_path}"
 
+
+    ssh-keygen -y  -f "${ssh_private_key_file_path}" > "${ssh_private_key_file_path}.pub"
     #
     # fix the private key permissions
     #
