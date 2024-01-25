@@ -19,7 +19,8 @@ function main {
 
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL}" == "Xtrue" ]; then
         ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
-        task provisioner:install
+        parent_dir = $(dirname $PWD)
+        task --taskfile ${parent_dir}/Taskfile.yml provisioner:install
              
     else
         pp 'Set the environment variable PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL to true to execute the provisioner install task'
@@ -28,7 +29,8 @@ function main {
     # cleanup cloud-init
     #
     #cd "${CONSTRUCTOR_REPO_PATH}"
-    task constructor:post-install
+    parent_dir = $(dirname $PWD)
+    task --taskfile ${parent_dir}/Taskfile.yml constructor:post-install
 }
 
 main
