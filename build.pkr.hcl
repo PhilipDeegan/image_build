@@ -9,7 +9,7 @@ build {
       "REMOTE_SSH_PRIVATE_KEY=${build.SSHPrivateKey}"
     ]
     inline = [
-      "bash local/install/scripts/ssh_add.bash"
+      "bash .constructor/local/install/scripts/ssh_add.bash"
     ]
   }
   #
@@ -21,7 +21,7 @@ build {
       "REMOTE_USER=${build.User}"
     ]
     inline = [
-      "bash local/install/scripts/exec_provisioner_task.bash"
+      "bash .constructor/local/install/scripts/exec_provisioner_task.bash"
     ]
   }
 
@@ -30,7 +30,7 @@ build {
     #
     #provisioner "shell-local" {
     #    inline = [
-    #       "bash local/install/scripts/ssh_del.bash"
+    #       "bash .constructor/local/install/scripts/ssh_del.bash"
     #    ]
     #}
     #
@@ -38,7 +38,7 @@ build {
     #
     #error-cleanup-provisioner "shell-local" {
     #  inline = [
-    #     "bash local/install/scripts/ssh_del.bash"
+    #     "bash .constructor/local/install/scripts/ssh_del.bash"
     #  ]
     #}
     post-processor "manifest" {
@@ -65,7 +65,7 @@ build {
     }
     post-processor "shell-local" {
         inline=[
-            "bash local/install/scripts/exec_post_processor_task.bash"
+            "bash .constructor/local/install/scripts/exec_post_processor_task.bash"
         ]
     }
 }

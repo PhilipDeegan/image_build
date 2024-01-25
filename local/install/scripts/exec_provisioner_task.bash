@@ -11,9 +11,9 @@ function pp {
 }
 
 function main {
-    local -r INVENTORY="${PWD}/inventory-ansible.pkgx"
-    local -r PLAYBOOKS="${PWD}/playbooks"
-    local -r ROLES="${PWD}/roles"
+    #local -r INVENTORY="${PWD}/.constructor/inventory-ansible.pkgx"
+    #local -r PLAYBOOKS="${PWD}/.constructor/playbooks"
+    #local -r ROLES="${PWD}/.constructor/roles"
 
     #cd "${PROVISIONER_REPO_PATH}"
 
@@ -28,7 +28,7 @@ function main {
     # cleanup cloud-init
     #
     #cd "${CONSTRUCTOR_REPO_PATH}"
-    task post-install
+    task constructor:post-install
 }
 
 main
