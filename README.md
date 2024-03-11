@@ -1,13 +1,14 @@
 # jupytercloud-project / image_build
 
-This repository defines some **constructor** code to build an openstack image using HashiCorp Packer.
+This repository defines some **constructor** code to build an openstack image using [HashiCorp Packer](https://www.packer.io/).  
 It must be used together with a **provisioner** repository code that will configure the packer image.
 
 ## Usage
 
 This repository must be cloned into a top-level project using the folowing base task config files
 
-```bash Taskfile.env
+### Taskfile.env
+```bash 
 export GIT_URL_BASE='https://github.com/jupytercloud-project'
 
 #############################################################################
@@ -31,7 +32,8 @@ export PROVISIONER_REPO_TAG=''
 export PROVISIONER_REPO_DIR='.provisioner'
 ```
 
-```yaml Taskfile.yaml
+### Taskfile.yaml
+```yaml 
 version: '3'
 
 dotenv:
