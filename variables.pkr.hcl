@@ -117,6 +117,7 @@ variable TARGET_IMAGE_NAME {
 variable TARGET_IMAGE_MANIFEST {
   description = "The target image manifest"
   type = string
+  default = "manifest.json"
 }
 
 variable FLOATING_IP_NETWORK {
