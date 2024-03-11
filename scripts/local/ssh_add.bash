@@ -1,6 +1,6 @@
 function main {
     set -x
-    local -r ssh_private_key_dir="${CONSTRUCTOR_REPO_PATH}/temp"
+    local -r ssh_private_key_dir="${PROJECT_REPO_PATH}/temp"
     local -r ssh_private_key_file="packer_temporary_ssh_key"
     local -r ssh_private_key_file_path="${ssh_private_key_dir}/${ssh_private_key_file}"
 
@@ -11,8 +11,6 @@ function main {
     #
     echo "${REMOTE_SSH_PRIVATE_KEY}" > "${ssh_private_key_file_path}"
 
-
-    ssh-keygen -y  -f "${ssh_private_key_file_path}" > "${ssh_private_key_file_path}.pub"
     #
     # fix the private key permissions
     #

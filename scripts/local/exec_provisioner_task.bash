@@ -11,16 +11,14 @@ function pp {
 }
 
 function main {
-    #local -r INVENTORY="${PWD}/.constructor/inventory-ansible.pkgx"
-    #local -r PLAYBOOKS="${PWD}/.constructor/playbooks"
-    #local -r ROLES="${PWD}/.constructor/roles"
-
-    #cd "${PROVISIONER_REPO_PATH}"
-
     if [ "X${PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL}" == "Xtrue" ]; then
-        ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
-        local parent_dir="$(dirname $PWD)"
-        task --taskfile "${parent_dir}/Taskfile.yml" provisioner:install
+        #ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${REMOTE_FQDN}"
+        pkgx +taskfile.dev task \
+             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+             provisioner:install
+        pkgx +taskfile.dev task \
+             --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+             provisioner:tests
              
     else
         pp 'Set the environment variable PKR_VAR_CONSTRUCTOR_EXEC_PROVISIONER_TASK_INSTALL to true to execute the provisioner install task'
@@ -29,8 +27,9 @@ function main {
     # cleanup cloud-init
     #
     #cd "${CONSTRUCTOR_REPO_PATH}"
-    local parent_dir="$(dirname $PWD)"
-    task --taskfile "${parent_dir}/Taskfile.yml" constructor:post-install
+    pkgx +taskfile.dev task \
+         --taskfile ${PROJECT_REPO_PATH}/Taskfile.yaml \
+         constructor:post-install
 }
 
 main
