@@ -8,7 +8,7 @@ It must be used together with a **provisioner** repository code that will config
 This repository must be cloned into a top-level project using the folowing base task config files
 
 ### Taskfile.env
-```bash 
+```bash
 export GIT_URL_BASE='https://github.com/jupytercloud-project'
 
 #############################################################################
@@ -33,7 +33,8 @@ export PROVISIONER_REPO_DIR='.provisioner'
 ```
 
 ### Taskfile.yaml
-```yaml 
+
+```yaml
 version: '3'
 
 dotenv:
@@ -41,13 +42,13 @@ dotenv:
 
 includes:
   constructor:
-    taskfile: '{{.CONSTRUCTOR_REPO_DIR}}/Taskfile.yml'
-    dir: '{{.CONSTRUCTOR_REPO_DIR}}'
+    taskfile: .constructor/Taskfile.yml
+    dir: .constructor
     optional: true
 
   provisioner:
-    taskfile: '{{.PROVISIONER_REPO_DIR}}/Taskfile.yml'
-    dir: '{{.PROVISIONER_REPO_DIR}}'
+    taskfile: .provisioner/Taskfile.yml
+    dir: .provisioner
     optional: true
 
 tasks:

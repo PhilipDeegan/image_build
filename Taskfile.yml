@@ -129,7 +129,7 @@ tasks:
                 - <<'EOF'
                 source {{.PROJECT_REPO_PATH}}/build.env
                 {{.CONSTRUCTOR_REPO_PATH}}/scripts/local/openstack_image_fetch.bash
-      EOF
+            EOF
 
   post-install:
     desc: post-install
