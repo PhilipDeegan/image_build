@@ -34,56 +34,12 @@ tasks:
                 --norc \
                 - <<'EOF'
                 eval "$(pkgx +openssh.com ssh-agent -s)"
+                source {{.PROJECT_REPO_PATH}}/build.env
                 pkgx +packer.io^{{.PACKER_VERSION}} packer \
                      {{.PACKER_COMMAND}} .
                 pkgx +openssh.com ssh-agent -k
       EOF
   
-  init_:
-    #desc: init
-    cmds:
-    - |
-      pkgx +gnu.org/coreutils env \
-           --split-string \
-           --ignore-environment \
-           USER="${USER}" \
-           HOME="${HOME}" \
-           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
-           pkgx +gnu.org/bash^5 bash \
-                --login \
-                --noprofile \
-                --norc \
-                - <<'EOF'
-                eval "$(pkgx --shellcode)"
-                eval "$(ssh-agent -s)"
-                pkgx +packer.io^{{.PACKER_VERSION}} packer \
-                     init .
-                pkgx +openssh.com ssh-agent -k
-      EOF
-
-  build_:
-    #desc: Constructor build task
-    silent: true
-    cmds:
-    - |
-      pkgx +gnu.org/coreutils env \
-            --split-string \
-            --ignore-environment \
-            USER="{{.USER}}" \
-            HOME="{{.HOME}}" \
-            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
-            pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
-                --login \
-                --noprofile \
-                --norc \
-                - <<'EOF'
-                eval "$(pkgx +openssh.com ssh-agent -s)"
-                source {{.PROJECT_REPO_PATH}}/build.env
-                pkgx +packer.io^{{.PACKER_VERSION}} packer \
-                     build .
-                pkgx +openssh.com ssh-agent -k
-      EOF
-
   init:
     desc: Constructor init task
     cmds:
