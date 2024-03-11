@@ -1,10 +1,13 @@
 source "openstack" "image-build" {
 
+    flavor = var.FLAVOR_NAME
+    floating_ip_network = var.FLOATING_IP_NETWORK
+
     external_source_image_url = var.SOURCE_IMAGE_URL
     image_name = var.TARGET_IMAGE_NAME
     skip_create_image = var.SKIP_IMAGE_CREATION
-    use_blockstorage_volume = true
-    image_disk_format = var.TARGET_IMAGE_FORMAT
+    #use_blockstorage_volume = true
+    #image_disk_format = var.TARGET_IMAGE_FORMAT
 
     volume_size = var.VOLUME_SIZE
     volume_name = var.VOLUME_NAME
@@ -35,9 +38,6 @@ source "openstack" "image-build" {
             BUILD_TOOL_VERSION = var.BUILD_TOOL_VERSION
         }
     )
-
-    flavor = var.FLAVOR_NAME
-    floating_ip_network = var.FLOATING_IP_NETWORK
 
     network_discovery_cidrs = [ var.NETWORK_DISCOVERY_CIDRS ]
 

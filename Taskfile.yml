@@ -1,5 +1,15 @@
 version: '3'
 
+env:
+  COREUTILS_VERSION: '*'
+  BASH_VERSION: '5'
+  PACKER_VERSION: '1.10'
+  OPENSSH_VERSION: ''
+  CONSTRUCTOR_REPO_PATH:
+    sh: pwd
+  PROJECT_REPO_PATH:
+    sh: dirname '{{.CONSTRUCTOR_REPO_PATH}}'
+
 tasks:
   default:
     desc: list tasks
@@ -7,8 +17,9 @@ tasks:
     cmds:
     - task --list
 
-  init:
-    desc: init
+  packer:
+    vars:
+      PACKER_COMMAND: '{{.PACKER_COMMAND}}'
     cmds:
     - |
       pkgx +gnu.org/coreutils env \
@@ -24,36 +35,74 @@ tasks:
                 - <<'EOF'
         eval "$(pkgx --shellcode)"
         eval "$(ssh-agent -s)"
-        packer init .
-        ssh-agent -k
+        pkgx +packer.io^{{.PACKER_VERSION}} packer \
+             {{.PACKER_COMMAND}} .
+        pkgx +openssh.com ssh-agent -k
+      EOF      
+  
+  init_:
+    #desc: init
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils env \
+           --split-string \
+           --ignore-environment \
+           USER="${USER}" \
+           HOME="${HOME}" \
+           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+           pkgx +gnu.org/bash^5 bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+        eval "$(pkgx --shellcode)"
+        eval "$(ssh-agent -s)"
+        pkgx +packer.io^{{.PACKER_VERSION}} packer \
+             init .
+        pkgx +openssh.com ssh-agent -k
       EOF
 
+  build_:
+    #desc: Constructor build task
+    silent: true
+    cmds:
+    - |
+      pkgx +gnu.org/coreutils env \
+            --split-string \
+            --ignore-environment \
+            USER="{{.USER}}" \
+            HOME="{{.HOME}}" \
+            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+            pkgx +gnu.org/bash^{{.BASH_VERSION}} bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+                eval "$(pkgx +openssh.com ssh-agent -s)"
+                source {{.PROJECT_REPO_PATH}}/build.env
+                pkgx +packer.io^{{.PACKER_VERSION}} packer \
+                     build .
+                pkgx +openssh.com ssh-agent -k
+      EOF
+
+  init:
+    desc: Constructor init task
+    cmds:
+    - task: packer
+      vars:
+        PACKER_COMMAND: init
 
   build:
-    desc: build
+    desc: Constructor build task
     cmds:
-    - |
-      pkgx +gnu.org/coreutils env \
-           --split-string \
-           --ignore-environment \
-           USER="${USER}" \
-           HOME="${HOME}" \
-           PATH="${HOME}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
-           pkgx +gnu.org/bash^5 bash \
-                --login \
-                --noprofile \
-                --norc \
-                - <<'EOF'
-        eval "$(pkgx --shellcode)"
-        eval "$(ssh-agent -s)"
-        packer build .
-        ssh-agent -k
-      EOF
+    - task: packer
+      vars:
+        PACKER_COMMAND: build
 
   get_ssh_key_path:
-    desc: return temporary ssh key path
+    desc: Return temporary ssh key path
     cmds:
-    - echo "${PWD}/temp/packer_temporary_ssh_key"
+    - echo '{{.PROJECT_REPO_PATH}}/temp/packer_temporary_ssh_key'
   
   get_remote_fqdn:
     cmds:
@@ -66,7 +115,22 @@ tasks:
   fetch:
     desc: Locally fetch the VM artifact from the build cloud
     cmds:
-    - bash "${PWD}/local/install/scripts/openstack_image_fetch.bash"
+    - |
+      pkgx +gnu.org/coreutils env \
+            --split-string \
+            --ignore-environment \
+            PROJECT_REPO_PATH="{{.PROJECT_REPO_PATH}}" \
+            PATH="{{.HOME}}/.pkgx/bin:/bin:/usr/bin:/usr/local/bin" \
+            USER="{{.USER}}" \
+            HOME="{{.HOME}}" \
+            pkgx +gnu.org/bash^5 bash \
+                --login \
+                --noprofile \
+                --norc \
+                - <<'EOF'
+                source {{.PROJECT_REPO_PATH}}/build.env
+                {{.CONSTRUCTOR_REPO_PATH}}/scripts/local/openstack_image_fetch.bash
+      EOF
  
   post-install:
     desc: post-install

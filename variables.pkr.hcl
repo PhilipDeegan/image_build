@@ -41,7 +41,7 @@ variable SYSTEM_DISTRIBUTION_VERSION_NAME {
 }
 
 variable SYSTEM_DISTRIBUTION_ARCH {
-  description = "The target system distribution arch (ex: x86_64)"
+  description = "The target system distribution arch (ex: amd64, arm64)"
   type = string
 }
 

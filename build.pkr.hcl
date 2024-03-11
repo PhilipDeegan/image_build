@@ -6,43 +6,37 @@ build {
 
   provisioner "shell-local" {
     environment_vars = [
+      "PROJECT_REPO_PATH=${local.project_repo_path}",
       "REMOTE_SSH_PRIVATE_KEY=${build.SSHPrivateKey}"
     ]
-    inline = [
-      "bash ./local/install/scripts/ssh_add.bash"
-    ]
+    script = "${local.constructor_repo_path}/scripts/local/ssh_add.bash"
   }
   #
   # https://www.packer.io/docs/templates/hcl_templates/contextual-variables
   #
   provisioner "shell-local" {
     environment_vars = [
+      "PROJECT_REPO_PATH=${local.project_repo_path}",
       "REMOTE_FQDN=${build.Host}",
       "REMOTE_USER=${build.User}"
     ]
-    inline = [
-      "bash ./local/install/scripts/exec_provisioner_task.bash"
-    ]
+    script = "${local.constructor_repo_path}/scripts/local/exec_provisioner_task.bash"
   }
 
     #
     # cleanup if all goes well
     #
     #provisioner "shell-local" {
-    #    inline = [
-    #       "bash ./local/install/scripts/ssh_del.bash"
-    #    ]
+    # script = "${local.constructor_path}/local/install/scripts/ssh_del.bash"
     #}
     #
     # cleanup if something goes wrong
     #
     #error-cleanup-provisioner "shell-local" {
-    #  inline = [
-    #     "bash ./local/install/scripts/ssh_del.bash"
-    #  ]
+    # script = "${local.constructor_path}/local/install/scripts/ssh_del.bash"
     #}
     post-processor "manifest" {
-        output = var.TARGET_IMAGE_MANIFEST
+        output = "${local.project_repo_path}/${var.TARGET_IMAGE_MANIFEST}"
         strip_path = true
         custom_data = {
             DISTRIBUTION_NAME = var.SYSTEM_DISTRIBUTION_NAME
@@ -64,8 +58,6 @@ build {
         }
     }
     post-processor "shell-local" {
-        inline=[
-            "bash ./local/install/scripts/exec_post_processor_task.bash"
-        ]
+      script = "${local.constructor_repo_path}/scripts/local/exec_post_processor_task.bash"
     }
 }
