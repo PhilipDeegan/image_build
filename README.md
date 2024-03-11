@@ -42,12 +42,12 @@ dotenv:
 
 includes:
   constructor:
-    taskfile: .constructor/Taskfile.yml
+    taskfile: .constructor/Taskfile.yaml
     dir: .constructor
     optional: true
 
   provisioner:
-    taskfile: .provisioner/Taskfile.yml
+    taskfile: .provisioner/Taskfile.yaml
     dir: .provisioner
     optional: true
 
