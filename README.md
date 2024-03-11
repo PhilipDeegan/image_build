@@ -105,8 +105,3 @@ tasks:
         REPO_TAG: '{{.PROVISIONER_REPO_TAG}}'
         REPO_DIR: '{{.PROVISIONER_REPO_DIR}}'
 ```
-
-
-\- 
-   \- .constructor
-   \- .provisioner
