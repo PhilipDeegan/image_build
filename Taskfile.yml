@@ -33,8 +33,7 @@ tasks:
                 --noprofile \
                 --norc \
                 - <<'EOF'
-        eval "$(pkgx --shellcode)"
-        eval "$(ssh-agent -s)"
+        eval "$(pkgx +openssh.com ssh-agent -s)"
         pkgx +packer.io^{{.PACKER_VERSION}} packer \
              {{.PACKER_COMMAND}} .
         pkgx +openssh.com ssh-agent -k
