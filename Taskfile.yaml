@@ -1,10 +1,10 @@
 version: '3'
 
 env:
-  COREUTILS_VERSION: '*'
+  COREUTILS_VERSION: '9.4'
   BASH_VERSION: '5'
   PACKER_VERSION: '1.10'
-  OPENSSH_VERSION: ''
+  OPENSSH_VERSION: '9.7'
   CONSTRUCTOR_REPO_PATH:
     sh: pwd
   PROJECT_REPO_PATH:
@@ -22,7 +22,7 @@ tasks:
       PACKER_COMMAND: '{{.PACKER_COMMAND}}'
     cmds:
     - |
-      pkgx +gnu.org/coreutils env \
+      pkgx +gnu.org/coreutils^{{.COREUTILS_VERSION}} env \
            --split-string \
            --ignore-environment \
            USER="{{.USER}}" \
@@ -33,11 +33,11 @@ tasks:
                 --noprofile \
                 --norc \
                 - <<'EOF'
-                eval "$(pkgx +openssh.com ssh-agent -s)"
+                eval "$(pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent -s)"
                 source {{.PROJECT_REPO_PATH}}/build.env
                 pkgx +packer.io^{{.PACKER_VERSION}} packer \
                      {{.PACKER_COMMAND}} .
-                pkgx +openssh.com ssh-agent -k
+                pkgx +openssh.com^{{.OPENSSH_VERSION}} ssh-agent -k
       EOF
   
   init:
