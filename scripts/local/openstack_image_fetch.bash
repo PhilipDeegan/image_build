@@ -62,6 +62,7 @@ function Openstack::Token::Get.id {
 }
 
 function Openstack::Image::Get.uuid {
+    local -r manifest_file_path="${1}"
     local -r jq_filter='.["builds"][0]["artifact_id"]'
 
     cat "${manifest_file_path}" \
@@ -69,6 +70,7 @@ function Openstack::Image::Get.uuid {
 }
 
 function Openstack::Image::Get.name {
+    local -r manifest_file_path="${1}"
     local -r jq_filter='.["builds"][0]["custom_data"]["BUILD_IMAGE_NAME"]'
 
     cat "${manifest_file_path}" \
@@ -99,6 +101,7 @@ function Openstack::Image.fetch {
 
 function main {
     local -r manifest_file_path="${PKR_VAR_TARGET_IMAGE_MANIFEST}"
+
     local -r openstack_cache_dir_path="${PROJECT_REPO_PATH}/.openstack-cache"
 
     mkdir -p "${openstack_cache_dir_path}"
@@ -108,15 +111,19 @@ function main {
     local -r http_unauthorized='401'
     local    curl_response_code=UNSET
     local -r glance_api="$(Openstack::Image::API "${openstack_cache_dir_path}")"
-    local -r image_uuid="$(Openstack::Image::Get.uuid)"
-    local -r image_name="$(Openstack::Image::Get.name)"
+    local -r image_uuid="$(Openstack::Image::Get.uuid "${PROJECT_REPO_PATH}/manifest.json")"
+    local -r image_name="$(Openstack::Image::Get.name "${PROJECT_REPO_PATH}/manifest.json")"
 
     #
     # if we already have a cached token, try to use it
     # otherwise re-issue a token
     #
+
+    [ -z "$(cat $openstack_token_file_path | xargs )" ] && \
+        rm $openstack_token_file_path || echo "token file found"
     test -f "${openstack_token_file_path}" \
- || Openstack::Token.issue "${openstack_token_file_path}"
+       || Openstack::Token.issue "${openstack_token_file_path}"
+
     #
     # 
     #
